@@ -1,4 +1,6 @@
-    admin-state enable
+interface ethernet-1/1 {
+        description To_ams12_ethernet-1/1
+admin-state enable
     subinterface 0 {
         type routed
         description toR1
@@ -14,3 +16,4 @@ set / interface ethernet-1/1 subinterface 0 type routed
 set / interface ethernet-1/1 subinterface 0 description toR1
 set / interface ethernet-1/1 subinterface 0 ipv4
 set / interface ethernet-1/1 subinterface 0 ipv4 address 10.1.1.1/31
+
