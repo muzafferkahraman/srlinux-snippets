@@ -1,0 +1,37 @@
+    tunnel-interface vxlan1 {
+        vxlan-interface 10 {
+            type bridged
+            ingress {
+                vni 10
+            }
+        }
+        vxlan-interface 20 {
+            type bridged
+            ingress {
+                vni 20
+            }
+        }
+        vxlan-interface 30 {
+            type bridged
+            ingress {
+                vni 30
+            }
+        }
+        vxlan-interface 100 {
+            type bridged
+            ingress {
+                vni 100
+            }
+        }
+        vxlan-interface 300 {
+            type bridged
+            ingress {
+                vni 300
+            }
+        }
+    }
+set / tunnel-interface vxlan1
+set / tunnel-interface vxlan1 vxlan-interface 100
+set / tunnel-interface vxlan1 vxlan-interface 100 type bridged
+set / tunnel-interface vxlan1 vxlan-interface 100 ingress
+set / tunnel-interface vxlan1 vxlan-interface 100 ingress vni 100
