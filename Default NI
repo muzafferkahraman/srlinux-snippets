@@ -1,0 +1,254 @@
+    network-instance default {
+        type default
+        admin-state enable
+        interface ethernet-1/55.1 {  }
+        interface ethernet-1/56.1 {  }
+        interface lo0.0 {  }
+        interface lo1.0 {   }
+        interface system0.0 { }
+        protocols {
+            bgp {
+                admin-state enable
+                autonomous-system 65000
+                router-id 192.0.2.1
+                ebgp-default-policy {
+                    import-reject-all false
+                    export-reject-all false 
+                }
+                group eBGP {
+                    admin-state enable
+                    export-policy export-loopbacks
+                    ipv4-unicast { admin-state enable  }
+                    ipv6-unicast {  admin-state disable }
+                    evpn {  admin-state disable }
+                    local-as 65001 {
+                        prepend-global-as false
+                    }
+                    timers {
+                        connect-retry 1
+                        minimum-advertisement-interval 1
+                    }
+                }
+                group iBGPv4 {
+                    admin-state enable
+                    peer-as 65000
+                    ipv4-unicast {  admin-state disable }
+               ipv6-unicast {  admin-state disable }
+                    evpn { admin-state enable }
+                    route-reflector {
+                        client true
+                        cluster-id 192.0.2.1
+                    }
+                    timers {
+                        connect-retry 1
+                        minimum-advertisement-interval 1
+                    }
+                    transport {
+                        local-address 192.0.2.1
+                    }
+                }
+                group vxlan-agent {
+                    admin-state enable
+                    peer-as 65000
+                    ipv4-unicast {  admin-state disable }
+                    ipv6-unicast {  admin-state disable }
+                    evpn {  admin-state enable }
+                    route-reflector {
+                        client true
+                        cluster-id 192.0.2.1
+                    }
+                }
+                ipv4-unicast {
+                    multipath {
+                        max-paths-level-1 2
+                        max-paths-level-2 2
+                    }
+                }
+                neighbor 100.1.2.1 {
+                    description "peer ams12"
+                    peer-as 65002
+                    peer-group eBGP
+                    transport {
+                        local-address 100.1.2.0
+                    }
+                }
+                neighbor 192.0.2.2 {
+                    peer-group iBGPv4
+                }
+                neighbor 192.0.2.3 {
+                    peer-group iBGPv4
+                }
+                neighbor 192.0.2.4 {
+                    peer-group iBGPv4
+                }
+                neighbor 192.0.2.5 {
+                    peer-group iBGPv4
+                }
+                neighbor 192.0.3.1 {
+                    admin-state enable
+                    description "Local EVPN proxy agent for static VXLAN"
+                    peer-group vxlan-agent
+                }
+            }
+                 trace-options {
+                    flag packets { modifier detail }
+                    flag update {  modifier detail  }
+                }
+            }
+            ospf {
+                instance ospf1 {
+                    admin-state enable
+                    version ospf-v2
+                    router-id 192.0.2.1
+                    max-ecmp-paths 2
+                    area 0.0.0.0 {
+                        interface ethernet-1/51.1 {
+                            interface-type point-to-point
+                            metric 5000
+                            mtu 9000
+                        }
+                        interface system0.0 {
+                        }
+                    }
+                }
+                instance ospf3 {
+                    admin-state enable
+                    version ospf-v3
+                    address-family ipv4-unicast
+                    router-id 192.0.2.1
+                    max-ecmp-paths 2
+                    area 0.0.0.0 {
+                        interface ethernet-1/53.1 {
+                            interface-type point-to-point
+                            metric 1000
+                        }
+                        interface lo2.0 {
+                        }
+                    }
+                }
+            }
+            static-vxlan-agent {
+                admin-state enable
+                source-address 192.0.3.1
+                peer-address 192.0.3.1
+                local-as 65000
+                peer-as 65000
+            }
+        }  }
+
+
+set / network-instance default
+set / network-instance default type default
+set / network-instance default admin-state enable
+ 
+set / network-instance default interface ethernet-1/55.1
+set / network-instance default interface lo0.0
+set / network-instance default interface lo1.0
+set / network-instance default interface system0.0
+ 
+set / network-instance default protocols
+set / network-instance default protocols bgp
+set / network-instance default protocols bgp admin-state enable
+set / network-instance default protocols bgp autonomous-system 65000
+set / network-instance default protocols bgp router-id 192.0.2.1
+set / network-instance default protocols bgp ebgp-default-policy
+set / network-instance default protocols bgp ebgp-default-policy import-reject-all false
+set / network-instance default protocols bgp ebgp-default-policy export-reject-all false
+ 
+set / network-instance default protocols bgp group eBGP
+set / network-instance default protocols bgp group eBGP admin-state enable
+set / network-instance default protocols bgp group eBGP export-policy export-loopbacks
+set / network-instance default protocols bgp group eBGP ipv4-unicast
+set / network-instance default protocols bgp group eBGP ipv4-unicast admin-state enable
+set / network-instance default protocols bgp group eBGP ipv6-unicast
+set / network-instance default protocols bgp group eBGP ipv6-unicast admin-state disable
+set / network-instance default protocols bgp group eBGP evpn
+set / network-instance default protocols bgp group eBGP evpn admin-state disable
+set / network-instance default protocols bgp group eBGP local-as 65001
+set / network-instance default protocols bgp group eBGP local-as 65001 prepend-global-as false
+set / network-instance default protocols bgp group eBGP timers
+set / network-instance default protocols bgp group eBGP timers connect-retry 1
+set / network-instance default protocols bgp group eBGP timers minimum-advertisement-interval 1
+ 
+set / network-instance default protocols bgp group iBGPv4
+set / network-instance default protocols bgp group iBGPv4 admin-state enable
+set / network-instance default protocols bgp group iBGPv4 peer-as 65000
+set / network-instance default protocols bgp group iBGPv4 ipv4-unicast
+set / network-instance default protocols bgp group iBGPv4 ipv4-unicast admin-state disable
+set / network-instance default protocols bgp group iBGPv4 ipv6-unicast
+set / network-instance default protocols bgp group iBGPv4 ipv6-unicast admin-state disable
+set / network-instance default protocols bgp group iBGPv4 evpn
+set / network-instance default protocols bgp group iBGPv4 evpn admin-state enable
+set / network-instance default protocols bgp group iBGPv4 route-reflector
+set / network-instance default protocols bgp group iBGPv4 route-reflector client true
+set / network-instance default protocols bgp group iBGPv4 route-reflector cluster-id 192.0.2.1
+set / network-instance default protocols bgp group iBGPv4 timers
+set / network-instance default protocols bgp group iBGPv4 timers connect-retry 1
+set / network-instance default protocols bgp group iBGPv4 timers minimum-advertisement-interval 1
+set / network-instance default protocols bgp group iBGPv4 transport
+set / network-instance default protocols bgp group iBGPv4 transport local-address 192.0.2.1
+ 
+set / network-instance default protocols bgp group vxlan-agent
+set / network-instance default protocols bgp group vxlan-agent admin-state enable
+set / network-instance default protocols bgp group vxlan-agent peer-as 65000
+set / network-instance default protocols bgp group vxlan-agent ipv4-unicast
+set / network-instance default protocols bgp group vxlan-agent ipv4-unicast admin-state disable
+set / network-instance default protocols bgp group vxlan-agent ipv6-unicast
+set / network-instance default protocols bgp group vxlan-agent ipv6-unicast admin-state disable
+set / network-instance default protocols bgp group vxlan-agent evpn
+set / network-instance default protocols bgp group vxlan-agent evpn admin-state enable
+set / network-instance default protocols bgp group vxlan-agent route-reflector
+set / network-instance default protocols bgp group vxlan-agent route-reflector client true
+set / network-instance default protocols bgp group vxlan-agent route-reflector cluster-id 192.0.2.1
+ 
+
+set / network-instance default protocols bgp ipv4-unicast
+set / network-instance default protocols bgp ipv4-unicast multipath
+set / network-instance default protocols bgp ipv4-unicast multipath max-paths-level-1 2
+set / network-instance default protocols bgp ipv4-unicast multipath max-paths-level-2 2
+set / network-instance default protocols bgp neighbor 100.1.2.1
+set / network-instance default protocols bgp neighbor 100.1.2.1 description "peer ams12"
+set / network-instance default protocols bgp neighbor 100.1.2.1 peer-as 65000
+set / network-instance default protocols bgp neighbor 100.1.2.1 peer-group iBGPv4
+set / network-instance default protocols bgp neighbor 100.1.2.1 transport
+set / network-instance default protocols bgp neighbor 100.1.2.1 transport local-address 100.1.2.0
+set / network-instance default protocols bgp neighbor 192.0.2.2
+set / network-instance default protocols bgp neighbor 192.0.2.2 peer-group iBGPv4
+ 
+set / network-instance default protocols bgp trace-options
+set / network-instance default protocols bgp trace-options flag packets
+set / network-instance default protocols bgp trace-options flag packets modifier detail
+set / network-instance default protocols bgp trace-options flag update
+set / network-instance default protocols bgp trace-options flag update modifier detail
+ 
+set / network-instance default protocols ospf
+set / network-instance default protocols ospf instance ospf1
+set / network-instance default protocols ospf instance ospf1 admin-state enable
+set / network-instance default protocols ospf instance ospf1 version ospf-v2
+set / network-instance default protocols ospf instance ospf1 router-id 192.0.2.1
+set / network-instance default protocols ospf instance ospf1 max-ecmp-paths 2
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0 interface ethernet-1/55.1
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0 interface ethernet-1/55.1 interface-type point-to-point
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0 interface ethernet-1/55.1 metric 5000
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0 interface ethernet-1/55.1 mtu 9000
+set / network-instance default protocols ospf instance ospf1 area 0.0.0.0 interface system0.0
+ 
+set / network-instance default protocols ospf instance ospf3
+set / network-instance default protocols ospf instance ospf3 admin-state enable
+set / network-instance default protocols ospf instance ospf3 version ospf-v3
+set / network-instance default protocols ospf instance ospf3 address-family ipv4-unicast
+set / network-instance default protocols ospf instance ospf3 router-id 192.0.2.1
+set / network-instance default protocols ospf instance ospf3 max-ecmp-paths 2
+set / network-instance default protocols ospf instance ospf3 area 0.0.0.0
+set / network-instance default protocols ospf instance ospf3 area 0.0.0.0 interface ethernet-1/55.1
+set / network-instance default protocols ospf instance ospf3 area 0.0.0.0 interface ethernet-1/55.1 interface-type point-to-point
+set / network-instance default protocols ospf instance ospf3 area 0.0.0.0 interface ethernet-1/55.1 metric 1000
+set / network-instance default protocols ospf instance ospf3 area 0.0.0.0 interface lo2.0
+ 
+set / network-instance default protocols static-vxlan-agent
+set / network-instance default protocols static-vxlan-agent admin-state enable
+set / network-instance default protocols static-vxlan-agent source-address 192.0.3.1
+set / network-instance default protocols static-vxlan-agent peer-address 192.0.3.1
+set / network-instance default protocols static-vxlan-agent local-as 65000
+set / network-instance default protocols static-vxlan-agent peer-as 65000
