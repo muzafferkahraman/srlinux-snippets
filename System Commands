@@ -1,0 +1,23 @@
+        dns {
+            network-instance mgmt
+            server-list [
+                8.8.8.8
+                9.9.9.9
+            ]
+        }
+        ntp {
+            admin-state enable
+            network-instance mgmt
+            server 195.113.20.2 {
+                prefer true
+            }
+        }
+set / system dns
+set / system dns network-instance mgmt
+set / system dns server-list [ 8.8.8.8 9.9.9.9 ]
+ 
+set / system ntp
+set / system ntp admin-state enable
+set / system ntp network-instance mgmt
+set / system ntp server 195.113.20.2
+set / system ntp server 195.113.20.2 prefer true
