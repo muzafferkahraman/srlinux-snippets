@@ -1,0 +1,155 @@
+set / interface ethernet-1/1
+set / interface ethernet-1/1 admin-state enable
+set / interface ethernet-1/1 subinterface 0
+set / interface ethernet-1/1 subinterface 0 type routed
+set / interface ethernet-1/1 subinterface 0 description toR1
+set / interface ethernet-1/1 subinterface 0 ipv4
+set / interface ethernet-1/1 subinterface 0 ipv4 address 10.1.1.1/31
+
+set / interface ethernet-1/2
+set / interface ethernet-1/2 admin-state enable
+set / interface ethernet-1/2 vlan-tagging true
+
+set / interface ethernet-1/2 subinterface 100
+set / interface ethernet-1/2 subinterface 100 type bridged
+set / interface ethernet-1/2 subinterface 100 admin-state enable
+set / interface ethernet-1/2 subinterface 100 vlan
+set / interface ethernet-1/2 subinterface 100 vlan encap
+set / interface ethernet-1/2 subinterface 100 vlan encap single-tagged
+set / interface ethernet-1/2 subinterface 100 vlan encap single-tagged vlan-id 100
+
+set / interface ethernet-1/2 subinterface 200
+set / interface ethernet-1/2 subinterface 200 type bridged
+set / interface ethernet-1/2 subinterface 200 admin-state enable
+set / interface ethernet-1/2 subinterface 200 vlan
+set / interface ethernet-1/2 subinterface 200 vlan encap
+set / interface ethernet-1/2 subinterface 200 vlan encap single-tagged
+set / interface ethernet-1/2 subinterface 200 vlan encap single-tagged vlan-id 200
+
+set / interface system0
+set / interface system0 admin-state enable
+set / interface system0 subinterface 0
+set / interface system0 subinterface 0 ipv4
+set / interface system0 subinterface 0 ipv4 address 192.0.2.1/32
+
+set / network-instance default
+set / network-instance default type default
+set / network-instance default admin-state enable
+set / network-instance default interface ethernet-1/1.0
+set / network-instance default interface system0.0
+set / network-instance default protocols
+set / network-instance default protocols bgp
+set / network-instance default protocols bgp admin-state enable
+set / network-instance default protocols bgp autonomous-system 65001
+set / network-instance default protocols bgp router-id 192.0.2.1
+
+set / network-instance default protocols bgp group ebgp
+set / network-instance default protocols bgp group ebgp admin-state enable
+set / network-instance default protocols bgp group ebgp export-policy export-to-underlay
+set / network-instance default protocols bgp group ebgp import-policy import-from-underlay
+set / network-instance default protocols bgp group ebgp peer-as 64999
+
+set / network-instance default protocols bgp group iBGPv4
+set / network-instance default protocols bgp group iBGPv4 admin-state enable
+set / network-instance default protocols bgp group iBGPv4 peer-as 65000
+set / network-instance default protocols bgp group iBGPv4 ipv4-unicast
+set / network-instance default protocols bgp group iBGPv4 ipv4-unicast admin-state disable
+set / network-instance default protocols bgp group iBGPv4 ipv6-unicast
+set / network-instance default protocols bgp group iBGPv4 ipv6-unicast admin-state disable
+set / network-instance default protocols bgp group iBGPv4 evpn
+set / network-instance default protocols bgp group iBGPv4 evpn admin-state enable
+set / network-instance default protocols bgp group iBGPv4 local-as 65000
+set / network-instance default protocols bgp group iBGPv4 timers
+set / network-instance default protocols bgp group iBGPv4 timers connect-retry 1
+set / network-instance default protocols bgp group iBGPv4 timers minimum-advertisement-interval 1
+set / network-instance default protocols bgp group iBGPv4 transport
+set / network-instance default protocols bgp group iBGPv4 transport local-address 192.0.2.1
+
+set / network-instance default protocols bgp neighbor 10.1.1.0
+set / network-instance default protocols bgp neighbor 10.1.1.0 admin-state enable
+set / network-instance default protocols bgp neighbor 10.1.1.0 peer-as 64999
+set / network-instance default protocols bgp neighbor 10.1.1.0 peer-group ebgp
+
+set / network-instance default protocols bgp neighbor 192.0.2.15
+set / network-instance default protocols bgp neighbor 192.0.2.15 peer-group iBGPv4
+
+set / network-instance mac-vrf100
+set / network-instance mac-vrf100 type mac-vrf
+set / network-instance mac-vrf100 admin-state enable
+set / network-instance mac-vrf100 interface ethernet-1/2.100
+set / network-instance mac-vrf100 vxlan-interface vxlan1.100
+set / network-instance mac-vrf100 protocols
+set / network-instance mac-vrf100 protocols bgp-evpn
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 admin-state enable
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 vxlan-interface vxlan1.100
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 evi 100
+set / network-instance mac-vrf100 protocols bgp-vpn
+set / network-instance mac-vrf100 protocols bgp-vpn bgp-instance 1
+set / network-instance mac-vrf100 protocols bgp-vpn bgp-instance 1 route-target
+set / network-instance mac-vrf100 protocols bgp-vpn bgp-instance 1 route-target export-rt target:65000:100
+set / network-instance mac-vrf100 protocols bgp-vpn bgp-instance 1 route-target import-rt target:65000:100
+
+set / network-instance mac-vrf200
+set / network-instance mac-vrf200 type mac-vrf
+set / network-instance mac-vrf200 admin-state enable
+set / network-instance mac-vrf200 interface ethernet-1/2.200
+set / network-instance mac-vrf200 vxlan-interface vxlan1.200
+set / network-instance mac-vrf200 protocols
+set / network-instance mac-vrf200 protocols bgp-evpn
+set / network-instance mac-vrf200 protocols bgp-evpn bgp-instance 1
+set / network-instance mac-vrf200 protocols bgp-evpn bgp-instance 1 admin-state enable
+set / network-instance mac-vrf200 protocols bgp-evpn bgp-instance 1 vxlan-interface vxlan1.200
+set / network-instance mac-vrf200 protocols bgp-evpn bgp-instance 1 evi 200
+set / network-instance mac-vrf200 protocols bgp-vpn
+set / network-instance mac-vrf200 protocols bgp-vpn bgp-instance 1
+set / network-instance mac-vrf200 protocols bgp-vpn bgp-instance 1 route-target
+set / network-instance mac-vrf200 protocols bgp-vpn bgp-instance 1 route-target export-rt target:65000:200
+set / network-instance mac-vrf200 protocols bgp-vpn bgp-instance 1 route-target import-rt target:65000:200
+
+set / routing-policy
+set / routing-policy prefix-set loopbacks
+set / routing-policy prefix-set loopbacks prefix 192.0.2.0/24 mask-length-range 32..32
+
+set / routing-policy policy export-to-underlay
+set / routing-policy policy export-to-underlay default-action
+set / routing-policy policy export-to-underlay default-action reject
+set / routing-policy policy export-to-underlay statement 20
+set / routing-policy policy export-to-underlay statement 20 match
+set / routing-policy policy export-to-underlay statement 20 match prefix-set loopbacks
+set / routing-policy policy export-to-underlay statement 20 action
+set / routing-policy policy export-to-underlay statement 20 action accept
+set / routing-policy policy export-to-underlay statement 30
+set / routing-policy policy export-to-underlay statement 30 match
+set / routing-policy policy export-to-underlay statement 30 match family ipv4-unicast
+set / routing-policy policy export-to-underlay statement 30 match protocol bgp
+set / routing-policy policy export-to-underlay statement 30 action
+set / routing-policy policy export-to-underlay statement 30 action accept
+
+set / routing-policy policy import-from-underlay
+set / routing-policy policy import-from-underlay default-action
+set / routing-policy policy import-from-underlay default-action reject
+set / routing-policy policy import-from-underlay statement 20
+set / routing-policy policy import-from-underlay statement 20 match
+set / routing-policy policy import-from-underlay statement 20 match prefix-set loopbacks
+set / routing-policy policy import-from-underlay statement 20 action
+set / routing-policy policy import-from-underlay statement 20 action accept
+set / routing-policy policy import-from-underlay statement 30
+set / routing-policy policy import-from-underlay statement 30 match
+set / routing-policy policy import-from-underlay statement 30 match family ipv4-unicast
+set / routing-policy policy import-from-underlay statement 30 match protocol bgp
+set / routing-policy policy import-from-underlay statement 30 action
+set / routing-policy policy import-from-underlay statement 30 action accept
+
+set / tunnel-interface vxlan1
+set / tunnel-interface vxlan1 vxlan-interface 100
+set / tunnel-interface vxlan1 vxlan-interface 100 type bridged
+set / tunnel-interface vxlan1 vxlan-interface 100 ingress
+set / tunnel-interface vxlan1 vxlan-interface 100 ingress vni 100
+
+set / tunnel-interface vxlan1 vxlan-interface 200
+set / tunnel-interface vxlan1 vxlan-interface 200 type bridged
+set / tunnel-interface vxlan1 vxlan-interface 200 ingress
+set / tunnel-interface vxlan1 vxlan-interface 200 ingress vni 200
+
+
