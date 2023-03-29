@@ -1,0 +1,74 @@
+tunnel-interface vxlan1 {
+        vxlan-interface 100 {
+            type bridged
+            ingress {
+                vni 100
+            }
+        }
+network-instance mac-vrf100 {
+        type mac-vrf
+        admin-state enable
+        interface ethernet-1/1.100 {
+        }
+        vxlan-interface vxlan1.100 {
+        }
+        protocols {
+            bgp-evpn {
+                bgp-instance 1 {
+                     admin-state enable
+                    vxlan-interface vxlan1.100
+                    evi 100
+                    vxlan-agent {
+                        admin-state enable
+                        evi 100
+                        vni 100
+                        static-vtep 1.1.1.7 {
+                        }
+                        static-vtep 1.1.1.8 {
+                        }
+                        static-vtep 1.1.1.9 {
+                        }
+                        static-vtep 1.1.1.10 {
+                        }
+                    }
+                }
+            }
+            bgp-vpn {
+                bgp-instance 1 {
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+info from state network-instance default tunnel-table ipv4
+ 
+network-instance default {
+tunnel-table {
+ipv4 {
+tunnel 10.22.22.2/32 type vxlan owner vxlan_mgr id 1 {
+// tunnel table entry for VTEP 10.22.22.2, created
+after the vxlan-tunnel vtep 10.22.22.2
+next-hop-group 677716962900
+info from state network-instance default route-table next-hop-group 677716962900
+ 
+network-instance default {
+route-table {
+next-hop-group 677716962900 {
+next-hop 0 {
+next-hop 677716962900
+// NH ID allocated by fib_mgr for the NHG-ID
+active true
+info from state network-instance default route-table next-hop 677716962900
+ 
+network-instance default {
+route-table {
+next-hop 677716962900 {
+// resolution of the NH ID
+type direct
+ip-address 10.1.2.2
+subinterface ethernet-1/1.1
