@@ -1,0 +1,60 @@
+    interface lo0 {
+        admin-state enable
+        subinterface 0 {
+            admin-state enable
+            ipv4 {
+                address 192.0.3.1/32 {
+                }
+            }
+        }
+    }
+    interface lo1 {
+        admin-state enable
+        subinterface 0 {
+            admin-state enable
+            ipv4 {
+                address 1.1.1.1/32 {
+                }
+            }
+            ipv6 {
+                address fd00:feed:beef:0:1:1:1:1/128 {
+                }
+            }
+        }
+    }
+    interface lo2 {
+        admin-state enable
+        subinterface 0 {
+            admin-state enable
+            ipv4 {
+                address 2.2.2.1/32 {
+                }
+            }
+            ipv6 {
+                address fd00:feed:beef:0:1:1:2:1/128 {
+                }
+            }
+        }
+    }
+set / interface lo0
+set / interface lo0 admin-state enable
+set / interface lo0 subinterface 0
+set / interface lo0 subinterface 0 admin-state enable
+set / interface lo0 subinterface 0 ipv4
+set / interface lo0 subinterface 0 ipv4 address 192.0.3.1/32
+set / interface lo1
+set / interface lo1 admin-state enable
+set / interface lo1 subinterface 0
+set / interface lo1 subinterface 0 admin-state enable
+set / interface lo1 subinterface 0 ipv4
+set / interface lo1 subinterface 0 ipv4 address 1.1.1.1/32
+set / interface lo1 subinterface 0 ipv6
+set / interface lo1 subinterface 0 ipv6 address fd00:feed:beef:0:1:1:1:1/128
+set / interface lo2
+set / interface lo2 admin-state enable
+set / interface lo2 subinterface 0
+set / interface lo2 subinterface 0 admin-state enable
+set / interface lo2 subinterface 0 ipv4
+set / interface lo2 subinterface 0 ipv4 address 2.2.2.1/32
+set / interface lo2 subinterface 0 ipv6
+set / interface lo2 subinterface 0 ipv6 address fd00:feed:beef:0:1:1:2:1/128
