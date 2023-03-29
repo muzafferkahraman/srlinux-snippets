@@ -1,0 +1,31 @@
+interface ethernet-1/55 {
+        description To_ams12_ethernet-1/55
+        admin-state enable
+        vlan-tagging true
+        subinterface 1 {
+            ip-mtu 9200
+            ipv4 {
+                address 100.1.2.0/31 {
+                }
+            }
+            vlan {
+                encap {
+                    single-tagged {
+                        vlan-id 1
+                    }
+                }
+            }
+        }
+    }
+set / interface ethernet-1/55
+set / interface ethernet-1/55 description To_ams11_ethernet-1/55
+set / interface ethernet-1/55 admin-state enable
+set / interface ethernet-1/55 vlan-tagging true
+set / interface ethernet-1/55 subinterface 1
+set / interface ethernet-1/55 subinterface 1 ip-mtu 9200
+set / interface ethernet-1/55 subinterface 1 ipv4
+set / interface ethernet-1/55 subinterface 1 ipv4 address 100.1.2.1/31
+set / interface ethernet-1/55 subinterface 1 vlan
+set / interface ethernet-1/55 subinterface 1 vlan encap
+set / interface ethernet-1/55 subinterface 1 vlan encap single-tagged
+set / interface ethernet-1/55 subinterface 1 vlan encap single-tagged vlan-id 1
