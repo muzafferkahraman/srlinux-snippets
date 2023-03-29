@@ -1,0 +1,34 @@
+ interface irb50 {
+        subinterface 0 {
+            ipv4 {
+                address 192.168.51.254/24 {
+                    anycast-gw true
+                }
+                arp {
+                    learn-unsolicited true
+                    host-route {
+                        populate dynamic {
+                        }
+                    }
+                    evpn {
+                        advertise dynamic {
+                        }
+                    }
+                }
+            }
+            anycast-gw {
+            }
+        }
+    }
+set / interface irb50
+set / interface irb50 subinterface 0
+set / interface irb50 subinterface 0 ipv4
+set / interface irb50 subinterface 0 ipv4 address 192.168.51.254/24
+set / interface irb50 subinterface 0 ipv4 address 192.168.51.254/24 anycast-gw true
+set / interface irb50 subinterface 0 ipv4 arp
+set / interface irb50 subinterface 0 ipv4 arp learn-unsolicited true
+set / interface irb50 subinterface 0 ipv4 arp host-route
+set / interface irb50 subinterface 0 ipv4 arp host-route populate dynamic
+set / interface irb50 subinterface 0 ipv4 arp evpn
+set / interface irb50 subinterface 0 ipv4 arp evpn advertise dynamic
+set / interface irb50 subinterface 0 anycast-gw
