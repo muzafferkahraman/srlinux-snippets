@@ -1,0 +1,16 @@
+    admin-state enable
+    subinterface 0 {
+        type routed
+        description toR1
+        ipv4 {
+            address 10.1.1.1/31 {
+            }
+        }
+    }
+set / interface ethernet-1/1
+set / interface ethernet-1/1 admin-state enable
+set / interface ethernet-1/1 subinterface 0
+set / interface ethernet-1/1 subinterface 0 type routed
+set / interface ethernet-1/1 subinterface 0 description toR1
+set / interface ethernet-1/1 subinterface 0 ipv4
+set / interface ethernet-1/1 subinterface 0 ipv4 address 10.1.1.1/31
