@@ -1,0 +1,51 @@
+    network-instance mac-vrf100 {
+        type mac-vrf
+        admin-state enable
+        interface ethernet-1/1.100 {
+        }
+        vxlan-interface vxlan1.100 {
+        }
+        protocols {
+            bgp-evpn {
+                bgp-instance 1 {
+                    admin-state enable
+                    vxlan-interface vxlan1.100
+                    evi 100
+                    static-vxlan-agent {
+                        admin-state enable
+                        evi 100
+                        vni 100
+                        static-vtep 1.1.1.7 {
+                        }
+                        static-vtep 1.1.1.8 {
+                        }
+                        static-vtep 1.1.1.9 {
+                        }
+                        static-vtep 1.1.1.10 {
+                        }
+                    }
+                }
+            }
+            bgp-vpn {
+                bgp-instance 1 {
+                }
+            }
+        }
+    }
+    
+    
+set / network-instance mac-vrf100
+set / network-instance mac-vrf100 type mac-vrf
+gnmic
+set / network-instance mac-vrf100 interface ethernet-1/1.100
+set / network-instance mac-vrf100 vxlan-interface vxlan1.100
+set / network-instance mac-vrf100 protocols
+set / network-instance mac-vrf100 protocols bgp-evpn
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 admin-state enable
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 vxlan-interface vxlan1.100
+set / network-instance mac-vrf100 protocols bgp-evpn bgp-instance 1 evi 100
+ 
+set / network-instance mac-vrf100 protocols bgp-vpn
+set / network-instance mac-vrf100 protocols bgp-vpn bgp-instance 1
+
