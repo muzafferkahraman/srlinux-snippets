@@ -1,0 +1,40 @@
+    admin-state enable
+    vlan-tagging true
+    subinterface 100 {
+        type bridged
+        admin-state enable
+        vlan {
+            encap {
+                single-tagged {
+                    vlan-id 100
+                }
+            }
+        }
+    }
+    subinterface 200 {
+        type bridged
+        admin-state enable
+        vlan {
+            encap {
+                single-tagged {
+                    vlan-id 200
+                }
+            }
+        }
+    }
+    
+set / interface ethernet-1/2 subinterface 100
+set / interface ethernet-1/2 subinterface 100 type bridged
+set / interface ethernet-1/2 subinterface 100 admin-state enable
+set / interface ethernet-1/2 subinterface 100 vlan
+set / interface ethernet-1/2 subinterface 100 vlan encap
+set / interface ethernet-1/2 subinterface 100 vlan encap single-tagged
+set / interface ethernet-1/2 subinterface 100 vlan encap single-tagged vlan-id 100
+
+set / interface ethernet-1/2 subinterface 200
+set / interface ethernet-1/2 subinterface 200 type bridged
+set / interface ethernet-1/2 subinterface 200 admin-state enable
+set / interface ethernet-1/2 subinterface 200 vlan
+set / interface ethernet-1/2 subinterface 200 vlan encap
+set / interface ethernet-1/2 subinterface 200 vlan encap single-tagged
+set / interface ethernet-1/2 subinterface 200 vlan encap single-tagged vlan-id 200
