@@ -1,0 +1,54 @@
+     routing-policy {
+        prefix-set lo1 {
+            prefix 1.1.1.0/24 mask-length-range 32..32 {
+            }         }
+        prefix-set loopbacks {
+            prefix 192.0.2.0/24 mask-length-range 32..32 {
+            }         }
+        policy export-loopbacks {
+            statement 10 {
+                match {
+                    prefix-set loopbacks
+                }
+                action {
+                    accept {
+                    }                 }             }
+            statement 11 {
+                match {
+                    prefix-set lo1
+                }
+                action {
+                    reject {
+                    }  }   }
+            statement 12 {
+                match {
+                    prefix-set lo2
+                }
+                action {
+                    accept {
+                    }    }             }          }     }
+                    
+                    
+set / routing-policy
+set / routing-policy prefix-set lo1
+set / routing-policy prefix-set lo1 prefix 1.1.1.0/24 mask-length-range 32..32
+set / routing-policy prefix-set lo2
+set / routing-policy prefix-set lo2 prefix 2.2.2.0/24 mask-length-range 32..32
+set / routing-policy prefix-set loopbacks
+set / routing-policy prefix-set loopbacks prefix 192.0.2.0/24 mask-length-range 32..32
+set / routing-policy policy export-loopbacks
+set / routing-policy policy export-loopbacks statement 10
+set / routing-policy policy export-loopbacks statement 10 match
+set / routing-policy policy export-loopbacks statement 10 match prefix-set loopbacks
+set / routing-policy policy export-loopbacks statement 10 action
+set / routing-policy policy export-loopbacks statement 10 action accept
+set / routing-policy policy export-loopbacks statement 11
+set / routing-policy policy export-loopbacks statement 11 match
+set / routing-policy policy export-loopbacks statement 11 match prefix-set lo1
+set / routing-policy policy export-loopbacks statement 11 action
+set / routing-policy policy export-loopbacks statement 11 action reject
+set / routing-policy policy export-loopbacks statement 12
+set / routing-policy policy export-loopbacks statement 12 match
+set / routing-policy policy export-loopbacks statement 12 match prefix-set lo2
+set / routing-policy policy export-loopbacks statement 12 action
+set / routing-policy policy export-loopbacks statement 12 action accept
